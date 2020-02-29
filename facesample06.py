@@ -28,7 +28,7 @@ know_face_names = [
 ]
 
 #Carregando Imagem de Teste
-test_image = face_recognition.load_image_file('./images/robsoneosegundo.jpg')
+test_image = face_recognition.load_image_file('./images/robrodtar.jpg')
 
 #Encontrando faces em imagem de teste
 face_locations = face_recognition.face_locations(test_image)
@@ -65,4 +65,4 @@ del draw
 
 #Exiba a imagem
 pil_image.show()
-pil_
+pil_image.save('./images/identify.jpg')
