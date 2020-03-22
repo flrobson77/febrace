@@ -1,8 +1,6 @@
 import face_recognition
-from espeak import espeak
+import os
 from PIL import Image
-
-espeak.set_voice('brazil')
 
 image = face_recognition.load_image_file('./images/robrodtar.jpg')
 face_locations = face_recognition.face_locations(image)
