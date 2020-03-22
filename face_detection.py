@@ -8,7 +8,7 @@ import numpy as np
 detector = dlib.get_frontal_face_detector()
 
 # Utiliza o Pillow para abrir a imagem
-im = PIL.Image.open("../images/robson.jpg")
+im = PIL.Image.open("./images/robson.jpg")
 
 # Utiliza a imagem já aberta pelo PIL para criar um numpy array
 np_array = np.array(im)

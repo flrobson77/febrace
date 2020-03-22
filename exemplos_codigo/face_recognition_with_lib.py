@@ -2,7 +2,7 @@
 
 import face_recognition
 
-image = face_recognition.load_image_file("./images/robrodtar.jpg")
+image = face_recognition.load_image_file("../images/robson.jpg")
 
 # Array de 4 valores referentes a localização do rosto na imagem
 face_locations = face_recognition.face_locations(image)
