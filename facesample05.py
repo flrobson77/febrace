@@ -19,6 +19,7 @@ for face_location in face_locations:
 
 for face_landmark in face_landmarks:
     #Mostrar a posicao de partes da face
+    chin, 
 
 
 print(face_locations)

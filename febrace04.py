@@ -31,7 +31,7 @@ know_face_names = [
 
 
 #Carregando Imagem de Teste
-test_image = face_recognition.load_image_file('./images/robrodtar.jpg')
+test_image = face_recognition.load_image_file('./images/robsoneosegundo.jpg')
 
 #Encontrando faces em imagem de teste
 face_locations = face_recognition.face_locations(test_image)
@@ -52,25 +52,30 @@ for face_location in face_locations:
 #Estrutura de repetição identificando as faces conhecidas
 for(top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
     matches = face_recognition.compare_faces(know_face_encodings, face_encoding)
-    
+    print (matches)
+    print (face_encoding)
     name = "Desconhecido"
-
+    
     if True in matches:
         first_match_index = matches.index(True)
+        print (first_match_index)
         name = know_face_names[first_match_index]
 
+    print (name)
+
     #Desenha um retangulo em torno da face
-    draw.rectangle(((left, top), (right, bottom)), outline=(0,0,255))
+    draw.rectangle(((left, top), (right, bottom)), outline=(0,255,255))
 
     #Coloca uma etiqueta com nome em baixo da face
     text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 20), (right, bottom)), fill=(0,0,255), outline=(0,0,255))
-
-    draw.text((left + 6, bottom - text_height - 6), name, fill=(255,255,255,255))
+    draw.rectangle(((left, bottom - text_height - 20), (right, bottom)), fill=(0,255,255), outline=(0,255,255))
+    draw.text((left + 10, bottom - text_height - 10), name, fill=(0,0,0,1))
+    
+    #Sintetiza por meio da voz as faces encontradas
     call(["espeak",name])
 
 del draw
 
 #Exiba a imagem com as faces reconhecidas
 pil_image.show()
-pil_image.save('./images/nvimagem/identify004.jpg')
+pil_image.save('./images/nvimagem/identify010.jpg')
