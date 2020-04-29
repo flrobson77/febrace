@@ -1,7 +1,8 @@
 import face_recognition
 import cv2
-
-print ("### Rodando ###")
+import numpy as np
+import os
+from subprocess import call
 
 #Banco de imagens
 #Carregando banco de imagens
@@ -30,8 +31,6 @@ know_face_names = [
     "Tarcisio"
 ]
 
-print ("### Carregando Vídeo ###")
-
 # Arquivo de vídeo
 cap = cv2.VideoCapture("./video/robsoneoterceiro.mp4")
 
@@ -47,7 +46,7 @@ while True:
     ret, frame = cap.read()
 
     #Redimensiona o quadro para melhorar a perfomance
-    frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.3)
+    frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
     # Converte a imagem BGR do openCV para RGB do face_recognition
     rgb_frame = frame[:, :, ::-1]
@@ -58,46 +57,47 @@ while True:
         face_locations = face_recognition.face_locations(rgb_frame)
         face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
-    process_this_frame = not process_this_frame
-
-    face_names = []
-
+        face_names = []
     #Estrutura de repetição identificando as faces conhecidas
-    for face_encoding in face_encodings:
-        matches = face_recognition.compare_faces(know_face_encodings, face_encoding)
+        for face_encoding in face_encodings:
+            matches = face_recognition.compare_faces(know_face_encodings, face_encoding)
+            name = "Desconhecido"
 
-        name = "Unknow"
-                           
-        if True in matches:
-            first_match_index = matches.index(True)
-            name = know_face_names[first_match_index]
-            #print ("### Achou!!! ###") 
-            #print (name)
-            face_names.append(name)
-        else:
+            print ("### inicio ###")
+            print (name)
+
+            face_distances = face_recognition.face_distance(know_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = know_face_names[best_match_index]
             face_names.append(name)
 
-        for(top, right, bottom, left), name in zip(face_locations, face_names):
+    process_this_frame = not process_this_frame    
+
+    for(top, right, bottom, left), name in zip(face_locations, face_names):
                         
-            color = (255,255,255)
-            texto = (0,0,0)
-            font = cv2.FONT_HERSHEY_SIMPLEX
+        color = (255,255,255)
+        texto = (0,255,0)
+        font = cv2.FONT_HERSHEY_TRIPLEX
         
-            # Desenha retangulo sobre a face
-            cv2.rectangle(frame, (left, top), (right, bottom), color, 2)
+        # Desenha retangulo sobre a face
+        cv2.rectangle(frame, (left, top), (right, bottom), color, 2)
         
-            # Desenha a etiqueda com o nome abaixo da face
-            cv2.rectangle(frame, (left, bottom - 20), (right, bottom), color, cv2.FILLED)
+        # Desenha a etiqueda com o nome abaixo da face
+        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), color, cv2.FILLED)
            
-            # Texto da imagem
-            cv2.putText(frame, name, (left + 5, bottom - 5), font, 0.5, texto, 2)
+        # Texto da imagem
+        cv2.putText(frame, name, (left + 10, bottom - 10), font, 0.4, texto, 1)
 
+        print ("### Resultado Final ###")
+        call(["espeak",name]) 
+        
         #Mostra a imagem resultante
         cv2.imshow('EVE-ng', frame)
     
-    if cv2.waitKey(1) == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+# All done!
 cap.release()
 cv2.destroyAllWindows()
-print ("### Acabou !!! ###")

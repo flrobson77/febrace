@@ -1,6 +1,7 @@
 import face_recognition
 #carregar a imagem
 image = face_recognition.load_image_file('./images/robson.jpg')
+print(image)
 
 #metodo que identifica a(s) face(s)
 face_locations = face_recognition.face_locations(image)
